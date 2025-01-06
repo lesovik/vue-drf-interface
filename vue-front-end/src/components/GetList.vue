@@ -146,6 +146,7 @@ export default {
       })
           .then(async response => {
             this.options = await response.json();
+            delete this.options.actions.POST['label']
           })
           .catch((err) => {
             console.error(err);

@@ -12,6 +12,7 @@ The Vue 3 application does the following:
  - validates data both client-side and server side
  - paginates the results
  - provides editing to 'choices' fields and foreign key search select fields
+ - uses basic Bootstrap SCC and minimal external components
 to run see [README](vue-front-end/README.md)
 ### Back End
 Django Rest Framework with PostgreSQL :

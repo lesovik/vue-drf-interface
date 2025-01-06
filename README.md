@@ -1,48 +1,111 @@
-# vue-drf-interface
-Vue 3 Interface to Django REST Framework
-## About 
-Simple single-page Vue front end application that reads specified REST endpoint and **automatically** provides tabular editable sortable interface to exposed endpoints.
+# Vue-DRF Interface
 
-front end and back end are independent of each other and communicate via CORs headers. Kept in the same repository for convenience
+A dynamic single-page application (SPA) built with Vue 3 and Django REST Framework (DRF) that provides an editable, sortable tabular interface for interacting with RESTful endpoints.
 
-### Front End
-The Vue 3 application does the following:
+## Features
 
- - reads root endpoint and find all exposed endpoints
- - routs endpoints as pages in application
- - GETs particular endpoint and tabularizes the data based on OPTIONS
- - provides ability to add and edit objects based on OPTIONS 
- - validates data both client-side and server side
- - paginates the results
- - provides editing to 'choices' fields and foreign key search select fields
- - uses basic Bootstrap SCC and minimal external components
+- **Dynamic Endpoint Discovery**: Automatically detects and integrates exposed endpoints from the DRF backend.
+- **CRUD Operations**: Supports creating, reading, updating, and deleting objects with client-side and server-side validation.
+- **Pagination**: Efficiently handles large datasets with seamless pagination.
+- **Field Handling**: Manages 'choices' fields and foreign key relationships with search-select functionality.
+- **Responsive Design**: Utilizes Bootstrap CSS for a clean and responsive user interface.
 
-to install and run see corresponding [README](vue-front-end/README.md)
+## Screenshots
 
 
-### Back End
-Django Rest Framework with PostgreSQL :
- - Provides REST API
+![Tabular View](screenshots/main.png)
+*Particular endpoint editing*
 
-   - Minor modifications to out-of-the box framework
-      - added 'page_size' to GET response for better pagination
-      - added 'label' field to serializer to be able to select parent object in many-to-one relationship automatically
-      - added capability for compounded sorting
-     
+## Installation
 
- - So far only two serialized models
-   - Customer
-   - Queue (with foreign key to Customer)
+### Prerequisites
 
+- **Backend**: Ensure you have Python and Docker installed.
+- **Frontend**: Node.js and npm are required.
 
- - If new model is added, properly serialized and exposed - front end will **automatically** add a new navigation link, and new model records can be added and edited
+### Backend Setup
 
- - Django standard admin is enabled and usable
- - all authentication to endpoints is currently disabled
+1. **Clone the Repository**:
 
-to install and run see corresponding [README](django-docker/README.md)
+   ```bash
+   git clone https://github.com/lesovik/vue-drf-interface.git
+   cd vue-drf-interface
+   ```
 
-![alt text](screenshots/main.png)
+2. **Navigate to Backend Directory**:
+
+   ```bash
+   cd django-docker
+   ```
+
+3. **Build and Run Docker Containers**:
+
+   ```bash
+   docker-compose up --build
+   ```
+
+   This command sets up the Django application with PostgreSQL.
+
+4. **Apply Migrations**:
+
+   In a new terminal, run:
+
+   ```bash
+   docker-compose exec web python manage.py migrate
+   ```
+
+5. **Create Superuser (Optional)**:
+
+   ```bash
+   docker-compose exec web python manage.py createsuperuser
+   ```
+
+6. **Access the Application**:
+
+   The backend API will be available at `http://localhost:8000/`.
+
+### Frontend Setup
+
+1. **Navigate to Frontend Directory**:
+
+   ```bash
+   cd ../vue-front-end
+   ```
+
+2. **Install Dependencies**:
+
+   ```bash
+   npm install
+   ```
+
+3. **Configure Environment Variables**:
+
+   Create a `.env` file in the `vue-front-end` directory with the following content:
+
+   ```
+   VUE_APP_API_BASE_URL=http://localhost:8000/api/
+   ```
+
+4. **Run the Development Server**:
+
+   ```bash
+   npm run serve
+   ```
+
+5. **Access the Frontend Application**:
+
+   Navigate to `http://localhost:8080/` in your browser.
+
+## Usage
+
+- **Navigating Endpoints**: The application automatically lists available endpoints. Use the navigation menu to access different datasets.
+- **Editing Entries**: Click on edit button on any row to edit its details. Fields are dynamically generated based on the backend's OPTIONS response.
+- **Adding New Entries**: Use the 'Add New' button to create a new record.
+- **Deleting Entries**: Select the delete option corresponding to the entry you wish to remove.
+
+## Contributing
+
+Contributions are welcome! Please fork the repository and create a pull request with your changes.
 
 #### To Do
   

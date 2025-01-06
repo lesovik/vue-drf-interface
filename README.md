@@ -47,8 +47,9 @@ to install and run see corresponding [README](django-docker/README.md)
 #### To Do
   
  - complex relationship field editing on the front end
-   
+   - unit tests
    - ie. many-to-many, many-to-one and more complex relationship, file fields etc.
    - Token based authentication
    - roles & permissions
    - connection error handling
+   

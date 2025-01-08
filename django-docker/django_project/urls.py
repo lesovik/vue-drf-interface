@@ -23,7 +23,9 @@ from api import views
 
 router = routers.DefaultRouter()
 router.register(r'customer', views.CustomerViewSet)
+router.register(r'equipment', views.EquipmentViewSet)
 router.register(r'queue', views.QueueViewSet)
+router.register(r'equipment_type', views.EquipmentTypeViewSet )
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),

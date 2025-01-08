@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from .models import Customer, Queue, EquipmentType
+from .models import Customer, Queue, EquipmentType, Equipment
 
 
 class LabelSerializer(serializers.HyperlinkedModelSerializer):
@@ -14,12 +14,12 @@ class LabelSerializer(serializers.HyperlinkedModelSerializer):
 class CustomerSerializer(LabelSerializer):
     class Meta:
         model = Customer
-        fields = ['id', 'label', 'name', 'status', 'created_at', 'updated_at']
+        fields = ['id', 'label', 'name', 'description', 'record_status', 'created_at', 'updated_at']
 
 
-class QueueCustomerSerializer(LabelSerializer):
+class QueueEquipmentSerializer(LabelSerializer):
     class Meta:
-        model = Customer
+        model = Equipment
         fields = ['id', 'label']
         extra_kwargs = {
             'id': {'read_only': False},
@@ -28,17 +28,17 @@ class QueueCustomerSerializer(LabelSerializer):
 
 
 class QueueSerializer(serializers.HyperlinkedModelSerializer):
-    customer = QueueCustomerSerializer()
+    equipment = QueueEquipmentSerializer()
 
     class Meta:
         model = Queue
-        fields = ['id', 'name', 'status', 'customer', 'created_at', 'updated_at']
+        fields = ['id', 'name', 'queue_status', 'equipment', 'created_at', 'updated_at']
 
-    def validate_customer(self, obj):
-        customer = Customer.objects.filter(pk=obj.get('id'))
-        if customer:
-            return customer[0]
-        raise ValidationError('No such customer!')
+    def validate_equipment(self, obj):
+        equipment = Equipment.objects.filter(pk=obj.get('id'))
+        if equipment:
+            return equipment[0]
+        raise ValidationError('No such equipment!')
 
     def update(self, instance, validated_data):
         if self.is_valid():
@@ -54,12 +54,7 @@ class EquipmentTypeSerializer(LabelSerializer):
         fields = ['id', 'label', 'name', 'sort_order']
 
 
-class EquipmentEquipmentType(serializers.ModelSerializer):
-    label = serializers.SerializerMethodField('set_label')
-
-    def set_label(self, instance):
-        return instance.first_name
-
+class EquipmentEquipmentTypeSerializer(LabelSerializer):
     class Meta:
         model = EquipmentType
         fields = ['id', 'label']
@@ -69,12 +64,24 @@ class EquipmentEquipmentType(serializers.ModelSerializer):
         }
 
 
+class EquipmentCustomerSerializer(LabelSerializer):
+    class Meta:
+        model = Customer
+        fields = ['id', 'label']
+        extra_kwargs = {
+            'id': {'read_only': False},
+            'label': {'read_only': False},
+        }
+
+
 class EquipmentSerializer(serializers.HyperlinkedModelSerializer):
-    equipment_type = QueueCustomerSerializer()
+    equipment_type = EquipmentEquipmentTypeSerializer()
+    customer = EquipmentCustomerSerializer()
 
     class Meta:
-        model = Queue
-        fields = ['id', 'name', 'status', 'equipment_type', 'created_at', 'updated_at']
+        model = Equipment
+        fields = ['id', 'name', 'description', 'equipment_type', 'customer', 'record_status', 'created_at',
+                  'updated_at']
 
     def validate_equipment_type(self, obj):
         equipment_type = EquipmentType.objects.filter(pk=obj.get('id'))

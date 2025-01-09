@@ -7,16 +7,14 @@
         nowrap="nowrap"
         v-bind:class="{
           'col-1 col-integer': field==='id',
-          'col-4': props.type==='string',
-          'col-2': props.type==='choices',
-          'col-2': props.type==='nested object',
+          'col-2': ['string','integer','choice','nested object'].includes(props.type) && field !== 'id',
           'col-1': props.type==='datetime',
           'was-validated' : !errors[field] && blurred[field]
         }"
     >
       <template v-if="!props.read_only && toggleEdit">
         <input
-            v-if="props.type==='string'"
+            v-if="props.type==='string' || props.type==='integer'"
             type="text"
             :id="field + '_' + index"
             v-model="row[field]"
@@ -47,7 +45,15 @@
             {{ option.display_name }}
           </option>
         </select>
-        <InputSearchSelect v-else-if="props.type==='nested object'" v-model="row[field]" @input="row[field] = $event" :value="row[field]" :info="props" :field="field"/>
+        <InputSearchSelect
+            v-else-if="props.type==='nested object'"
+            v-model="row[field]" @input="row[field] = $event"
+            :value="row[field]"
+            :info="props"
+
+            v-bind:class="{'is-invalid' : errors[field] && blurred[field]}"
+            :field="field"
+        />
 
 
         <div class="invalid-tooltip">

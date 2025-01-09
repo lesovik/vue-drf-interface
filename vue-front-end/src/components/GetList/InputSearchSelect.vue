@@ -7,13 +7,15 @@
             }"
         v-model="searchValue.label"
         @input="searchChanged"
+        @click="setOpen(!open)"
+        @blur="setOpen(!open)"
         @keydown.enter="suggestionSelected(matches[highlightIndex])"
         @keydown.down="down"
         @keydown.up="up"
     />
     <span class="toggle" @mousedown.prevent @click="setOpen(!open)">
-      <span class="arrow-up pi pi-arrow-circle-up"></span>
-      <span class="arrow-down pi pi-arrow-circle-down"></span>
+      <span class="arrow-up pi pi-chevron-up"></span>
+      <span class="arrow-down pi pi-chevron-down"></span>
     </span>
     <ul class="suggestion-list dropdown-menu">
       <li
@@ -65,13 +67,15 @@ export default {
   },
   methods: {
     setOpen(isOpen) {
+      if(isOpen){
+        this.fetchData()
+      }
       this.open = isOpen
     },
     searchChanged() {
       if (!this.open) {
         this.open = true
       }
-      this.fetchData()
       this.highlightIndex = 0
     },
     suggestionSelected(suggestion) {
@@ -84,6 +88,7 @@ export default {
         for (let option in this.options) {
           if (option.label === newValue.label) {
             this.searchValue = Object.assign({}, newValue)
+
           }
         }
       }
@@ -98,6 +103,8 @@ export default {
       }
     },
     down() {
+
+      this.fetchData()
       if (this.open) {
         if (this.highlightIndex < this.matches.length - 1) {
           this.highlightIndex++
@@ -116,11 +123,11 @@ export default {
             console.error(err);
           });
     },
-    getSearchValue(){
-      if(this.value){
+    getSearchValue() {
+      if (this.value) {
         return Object.assign({}, this.value)
       }
-      return {id:null,label:''}
+      return {id: null, label: ''}
     }
   },
   data() {

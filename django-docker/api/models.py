@@ -25,7 +25,7 @@ class UniquelyNamed(models.Model):
 
 
 class DatedRecord(models.Model):
-    record_status = models.CharField(max_length=20, choices=RecordStatus.choices)
+    record_status = models.CharField(max_length=20, choices=RecordStatus.choices, default=RecordStatus.ACTIVE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -48,6 +48,11 @@ class Described(models.Model):
 
 
 class Customer(UniquelyNamed, Described, DatedRecord):
+
+    def __str__(self):
+        return self.name
+
+class Attribute(UniquelyNamed, Described, DatedRecord):
 
     def __str__(self):
         return self.name
@@ -85,6 +90,10 @@ class Equipment(UniquelyNamed, Described, DatedRecord):
         Customer,
         on_delete=models.PROTECT,
         blank=False,
+    )
+    attributes= models.ManyToManyField(
+        Attribute,
+        blank=True,
     )
 
     def __str__(self):

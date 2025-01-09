@@ -1,5 +1,6 @@
 <template>
   <nav class="navbar navbar-expand-sm navbar-light bg-light">
+
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item" v-for="(path)  in paths" :key="path.name">

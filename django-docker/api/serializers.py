@@ -1,7 +1,13 @@
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from .models import Customer, Queue, EquipmentType, Equipment
+from .models import (
+    Customer,
+    Queue,
+    EquipmentType,
+    Equipment,
+    Attribute
+)
 
 
 class LabelSerializer(serializers.HyperlinkedModelSerializer):
@@ -14,6 +20,12 @@ class LabelSerializer(serializers.HyperlinkedModelSerializer):
 class CustomerSerializer(LabelSerializer):
     class Meta:
         model = Customer
+        fields = ['id', 'label', 'name', 'description', 'record_status', 'created_at', 'updated_at']
+
+
+class AttributeSerializer(LabelSerializer):
+    class Meta:
+        model = Attribute
         fields = ['id', 'label', 'name', 'description', 'record_status', 'created_at', 'updated_at']
 
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container-fluid">
     <NavApi :paths="routes"></NavApi>
     <RouterView :key="$route.path"/>
   </div>
@@ -18,7 +18,7 @@ export default {
   },
   watch: {
     $route(to) {
-      let name = to.name ? this.capitalize(to.name) : null
+      let name = to.name ? this.capitalize(to.name.replace('_',' ')) : null
       document.title = name || "Default Title";
     },
   },

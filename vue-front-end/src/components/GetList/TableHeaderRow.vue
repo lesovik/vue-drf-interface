@@ -11,10 +11,10 @@
       <i
           v-bind:class="{
               'pi':true,
-              'pi-circle':!this.sort.find((value) => value[field]),
-              'pi-arrow-circle-up':this.sort.find((value) => value[field])
+             // 'pi-':!this.sort.find((value) => value[field]),
+              'pi-chevron-up':this.sort.find((value) => value[field])
                                     && this.sort.find((value) => value[field])[field] === 'asc',
-              'pi-arrow-circle-down':this.sort.find((value) => value[field])
+              'pi-chevron-down':this.sort.find((value) => value[field])
                                     && this.sort.find((value) => value[field])[field] === 'desc',
               'disabled':true,
             }"
@@ -48,7 +48,8 @@ export default {
       } else {
         sort = []
         sort[field] = 'asc'
-        this.sort.push(sort)
+        //this.sort.push(sort)
+        this.sort=[sort]
       }
       console.log(this.sort)
       this.$emit('sortList', this.sort)

@@ -74,13 +74,13 @@ class EquipmentCustomerSerializer(LabelSerializer):
         }
 
 
-class EquipmentSerializer(serializers.HyperlinkedModelSerializer):
+class EquipmentSerializer(LabelSerializer):
     equipment_type = EquipmentEquipmentTypeSerializer()
     customer = EquipmentCustomerSerializer()
 
     class Meta:
         model = Equipment
-        fields = ['id', 'name', 'description', 'equipment_type', 'customer', 'record_status', 'created_at',
+        fields = ['id', 'label', 'name', 'description', 'equipment_type', 'customer', 'record_status', 'created_at',
                   'updated_at']
 
     def validate_equipment_type(self, obj):
@@ -88,6 +88,12 @@ class EquipmentSerializer(serializers.HyperlinkedModelSerializer):
         if equipment_type:
             return equipment_type[0]
         raise ValidationError('No such equipment type!')
+
+    def validate_customer(self, obj):
+        customer = Customer.objects.filter(pk=obj.get('id'))
+        if customer:
+            return customer[0]
+        raise ValidationError('No such customer!')
 
     def update(self, instance, validated_data):
         if self.is_valid():

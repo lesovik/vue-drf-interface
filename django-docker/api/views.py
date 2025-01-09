@@ -34,7 +34,7 @@ class CustomerViewSet(viewsets.ModelViewSet):
 
 
     filter_backends = (SearchFilter,)
-    search_fields = ['first_name']
+    search_fields = ['name']
 
     def get_queryset(self):
         sorter = get_sorter(
